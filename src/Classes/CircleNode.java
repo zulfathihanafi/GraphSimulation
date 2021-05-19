@@ -9,10 +9,8 @@ public class CircleNode extends CellNodes{
     public CircleNode(Integer cellID,int xCoordinate, int yCoordinate) {
         super(cellID,xCoordinate,yCoordinate);
 
-        Circle view = new Circle();
+        Circle view = new Circle(18);
 
-
-        view.setRadius(15.0);
         view.setStroke(Color.DARKBLUE);
         view.setFill(Color.DARKBLUE);
 

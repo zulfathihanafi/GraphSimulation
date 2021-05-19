@@ -3,7 +3,9 @@ package Classes;
 
 
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +47,12 @@ public class CellNodes extends Pane {
     }
 
     public void setView(Node view) {
-
+        Label idLabel = new Label();
+        idLabel.setText(cellID+"");
+        idLabel.setTextFill(Color.WHITE);
         this.view = view;
         getChildren().add(view);
-
+        getChildren().add(idLabel);
     }
 
     public Node getView() {

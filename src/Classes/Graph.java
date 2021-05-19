@@ -13,7 +13,7 @@ public class Graph {
 
     private ZoomScroll scrollPane;
 
-   // MouseGestures mouseGestures;
+   Mouse mouseGestures;
 
     /**
      * the pane wrapper is necessary or else the scrollpane would always align
@@ -31,7 +31,7 @@ public class Graph {
 
         canvas.getChildren().add(cellLayer);
 
-        //mouseGestures = new MouseGestures(this);
+        mouseGestures = new Mouse(this);
 
         scrollPane = new ZoomScroll(canvas);
 
@@ -66,9 +66,9 @@ public class Graph {
         getCellLayer().getChildren().removeAll(model.getRemovedEdges());
 
         // enable dragging of cells
-//        for (Cell cell : model.getAddedCells()) {
-//            mouseGestures.makeDraggable(cell);
-//        }
+        for (CellNodes cell : model.getAddedCells()) {
+            mouseGestures.makeDraggable(cell);
+        }
 
         // every cell must have a parent, if it doesn't, then the graphParent is
         // the parent

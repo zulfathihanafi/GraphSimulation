@@ -19,8 +19,13 @@ public class CurrentLayout extends Layout{
         List<CellNodes> cellNodes = graph.getModel().getAllCells();
 
         for(CellNodes cell:cellNodes){
+            //Random rnd = new Random();
+
             double x = cell.xCoordinate*40;
             double y = cell.yCoordinate*40;
+
+           // double x = rnd.nextDouble()*500;
+            //double y = rnd.nextDouble()*500;
             cell.relocate(x,y);
         }
 
