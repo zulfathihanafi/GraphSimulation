@@ -6,6 +6,7 @@ import Classes.Graph;
 import Classes.Layout;
 import Classes.Model;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -13,8 +14,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -35,6 +38,8 @@ public class Simulation implements Initializable {
     public ComboBox<String> AlgorithmChooserBox;
     public Text AnswerText;
     public StackPane paneStack1;
+    public Button start_button;
+    public Text back_text;
 
 
     private String textFileDirectory = FirstChooseFile.textFileDirectory;
@@ -117,7 +122,31 @@ public class Simulation implements Initializable {
 
         graph.endUpdate();
     }
+
+    //this method will back to prev page
+    public void backTextPressed(MouseEvent event) {
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource("../FXMLFiles/FirstChooseFile.fxml"));
+            Scene scene = new Scene(parent);
+
+            //This line gets stage information
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            window.setScene(scene);
+            window.show();
+        }catch (IOException e){
+            System.out.println("Error"+ e);
+        }
+    }
+
+    public void startButtonPressed(ActionEvent event) {
+        String algorithm = AlgorithmChooserBox.getValue();
+        System.out.println(algorithm);
+
+    }
     //File textFile = new File(FirstChooseFile.textFileDirectory);
+
+
 
 
 }
