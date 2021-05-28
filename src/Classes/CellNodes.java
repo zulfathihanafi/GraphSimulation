@@ -13,14 +13,14 @@ import java.util.List;
 public class CellNodes extends Pane {
 
     Integer cellID;
-    int xCoordinate,yCoordinate;
+    double xCoordinate,yCoordinate;
 
     List<CellNodes> child = new ArrayList<>();
     List<CellNodes> parent = new ArrayList<>();
 
     Node view;
 
-    public CellNodes(Integer cellID,int xCoordinate,int yCoordinate) {
+    public CellNodes(Integer cellID,double xCoordinate,double yCoordinate) {
         this.cellID = cellID;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;

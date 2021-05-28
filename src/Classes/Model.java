@@ -72,7 +72,7 @@ public class Model {
         return allEdges;
     }
 
-    public void addCell(int id,int xCoordinate, int yCoordinate) {
+    public void addCell(int id,double xCoordinate, double yCoordinate) {
 
                 CircleNode newCell = new CircleNode(id,xCoordinate,yCoordinate);
                 addCell(newCell);

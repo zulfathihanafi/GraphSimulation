@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 
 public class CircleNode extends CellNodes{
 
-    public CircleNode(Integer cellID,int xCoordinate, int yCoordinate) {
+    public CircleNode(Integer cellID,double xCoordinate, double yCoordinate) {
         super(cellID,xCoordinate,yCoordinate);
 
         Circle view = new Circle(18);

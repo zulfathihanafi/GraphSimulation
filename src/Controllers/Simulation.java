@@ -5,27 +5,21 @@ import Classes.CurrentLayout;
 import Classes.Graph;
 import Classes.Layout;
 import Classes.Model;
-import javafx.application.Application;
+import Tools.Normalizer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -101,10 +95,21 @@ public class Simulation implements Initializable {
             N = Integer.parseInt(firstLine[0]); //N represents the number of locations in the text file
             C = Integer.parseInt(firstLine[1]);
 
+            double[] x = new double[N];
+            double[] y = new double[N];
             for (int i = 0; i < N; i++) {
                 String[] line_i = inText.nextLine().split(" ");
-                model.addCell(i,Integer.parseInt(line_i[0])/8, Integer.parseInt(line_i[1])/8);
+                x[i] = Integer.parseInt(line_i[0]);
+                y[i] = Integer.parseInt(line_i[1]);
+                //model.addCell(i,Integer.parseInt(line_i[0])/8, Integer.parseInt(line_i[1])/8);
             }
+            x = Normalizer.minMax(x,15);
+            y = Normalizer.minMax(y,15);
+            for(int i=0;i<N;i++){
+                model.addCell(i,x[i],y[i]);
+            }
+
+
             for(int i=0;i<N;i++){
                 for(int j=0;j<N;j++){
                     if(i!=j){
