@@ -21,8 +21,8 @@ public class CurrentLayout extends Layout{
         for(CellNodes cell:cellNodes){
             //Random rnd = new Random();
 
-            double x = cell.xCoordinate*40;
-            double y = cell.yCoordinate*40;
+            double x = cell.xCoordinate;
+            double y = cell.yCoordinate;
 
            // double x = rnd.nextDouble()*500;
             //double y = rnd.nextDouble()*500;

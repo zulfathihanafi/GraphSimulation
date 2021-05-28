@@ -1,11 +1,15 @@
 package Controllers;
 
 
+import BackEnd.GraphComponent.MapVertex;
+import BackEnd.Simulation.Greedy.BestFirst;
+import BackEnd.Simulation.Greedy.Dijkstra;
+import BackEnd.map.MapGraph;
 import Classes.CurrentLayout;
 import Classes.Graph;
 import Classes.Layout;
 import Classes.Model;
-import Tools.Normalizer;
+import Tools.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,6 +28,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -34,7 +40,7 @@ public class Simulation implements Initializable {
     public StackPane paneStack1;
     public Button start_button;
     public Text back_text;
-
+    private static MapGraph map = new MapGraph();
 
     private String textFileDirectory = FirstChooseFile.textFileDirectory;
 
@@ -42,11 +48,15 @@ public class Simulation implements Initializable {
     Graph graph = new Graph();
     private static int N, C;
 
-
+    private Map<String,Integer> algorithmInteger;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //comboBox initializer
         String[] algorithm = {"Dijkstra","Best Search","A* Search","Basic Simulation"};
+        algorithmInteger = new HashMap<>();
+        for(int i=0;i<algorithm.length;i++){
+            algorithmInteger.put(algorithm[i],i);
+        }
         AlgorithmChooserBox.getItems().setAll(algorithm);
 
 
@@ -83,11 +93,7 @@ public class Simulation implements Initializable {
         graph.beginUpdate();
         //addcell (id,x,y)
         //model.addCell(1,50,50);
-
-
-
-
-
+        
         try {
             Scanner inText = new Scanner(new FileInputStream(textFileDirectory));
 
@@ -99,12 +105,18 @@ public class Simulation implements Initializable {
             double[] y = new double[N];
             for (int i = 0; i < N; i++) {
                 String[] line_i = inText.nextLine().split(" ");
+                MapVertex temp = new MapVertex(Double.parseDouble(line_i[0]), Double.parseDouble(line_i[1]), Integer.parseInt(line_i[2]), i); //add Vertex in Map
+                map.addVertex(temp);
                 x[i] = Integer.parseInt(line_i[0]);
                 y[i] = Integer.parseInt(line_i[1]);
                 //model.addCell(i,Integer.parseInt(line_i[0])/8, Integer.parseInt(line_i[1])/8);
             }
-            x = Normalizer.minMax(x,15);
-            y = Normalizer.minMax(y,15);
+            map.completeConnect();
+            
+            //scaling the graph in GUI
+            int MaxRange = 600;
+            x = Normalizer.minMax(x,MaxRange);
+            y = Normalizer.minMax(y,MaxRange);
             for(int i=0;i<N;i++){
                 model.addCell(i,x[i],y[i]);
             }
@@ -131,6 +143,8 @@ public class Simulation implements Initializable {
     //this method will back to prev page
     public void backTextPressed(MouseEvent event) {
         try {
+
+            map.clear();
             Parent parent = FXMLLoader.load(getClass().getResource("../FXMLFiles/FirstChooseFile.fxml"));
             Scene scene = new Scene(parent);
 
@@ -139,6 +153,7 @@ public class Simulation implements Initializable {
 
             window.setScene(scene);
             window.show();
+
         }catch (IOException e){
             System.out.println("Error"+ e);
         }
@@ -147,6 +162,20 @@ public class Simulation implements Initializable {
     public void startButtonPressed(ActionEvent event) {
         String algorithm = AlgorithmChooserBox.getValue();
         System.out.println(algorithm);
+        String[] answer = new String[2];
+        int getAlgorithm = algorithmInteger.get(algorithm);
+        switch (getAlgorithm){
+            case 0 :
+                answer = Dijkstra.run(map,C);
+                break;
+
+        }
+        String text = "";
+        for(int i=0;i<answer.length;i++){
+            text+=answer[i]+"\n";
+        }
+
+        AnswerText.setText(text);
 
     }
     //File textFile = new File(FirstChooseFile.textFileDirectory);
