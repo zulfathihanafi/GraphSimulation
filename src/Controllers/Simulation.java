@@ -2,13 +2,9 @@ package Controllers;
 
 
 import BackEnd.GraphComponent.MapVertex;
-import BackEnd.Simulation.Greedy.BestFirst;
-import BackEnd.Simulation.Greedy.Dijkstra;
+import BackEnd.Simulation.Greedy.*;
 import BackEnd.map.MapGraph;
-import Classes.CurrentLayout;
-import Classes.Graph;
-import Classes.Layout;
-import Classes.Model;
+import Classes.*;
 import Tools.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -52,7 +48,7 @@ public class Simulation implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //comboBox initializer
-        String[] algorithm = {"Dijkstra","Best Search","A* Search","Basic Simulation"};
+        String[] algorithm = {"A Star","Best First","Best Path","Best Path v2","Dijkstra","Greedy Search"};
         algorithmInteger = new HashMap<>();
         for(int i=0;i<algorithm.length;i++){
             algorithmInteger.put(algorithm[i],i);
@@ -85,10 +81,10 @@ public class Simulation implements Initializable {
 
     }
 
-
+    static Model model;
 
     private void addGraphComponents() {
-        Model model = graph.getModel();
+         model = graph.getModel();
 
         graph.beginUpdate();
         //addcell (id,x,y)
@@ -143,7 +139,7 @@ public class Simulation implements Initializable {
     //this method will back to prev page
     public void backTextPressed(MouseEvent event) {
         try {
-
+            model.clear();
             map.clear();
             Parent parent = FXMLLoader.load(getClass().getResource("../FXMLFiles/FirstChooseFile.fxml"));
             Scene scene = new Scene(parent);
@@ -166,9 +162,23 @@ public class Simulation implements Initializable {
         int getAlgorithm = algorithmInteger.get(algorithm);
         switch (getAlgorithm){
             case 0 :
+                answer = A_star.run(map,C);
+                break;
+            case 1:
+                answer = BestFirst.run(map,C);
+                break;
+            case 2 :
+                answer = BestPath.run(map,C);
+                break;
+            case 3:
+                answer = BestPath_v2.run(map,C);
+                break;
+            case 4 :
                 answer = Dijkstra.run(map,C);
                 break;
-
+            case 5:
+                answer = GreedySearch.run(map,C);
+                break;
         }
         String text = "";
         for(int i=0;i<answer.length;i++){

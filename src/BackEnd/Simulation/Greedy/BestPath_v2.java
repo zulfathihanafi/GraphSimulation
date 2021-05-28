@@ -2,17 +2,23 @@ package BackEnd.Simulation.Greedy;
 
 import BackEnd.GraphComponent.*;
 import BackEnd.map.*;
+import Classes.CellNodes;
+import Classes.CircleNode;
+import Classes.Model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Random;
 
 public class BestPath_v2 {
 
     private static MapGraph G;
     private static int C;
     private static double tourCost = 0;
+    static Map<Integer, CellNodes> cellNodesMap = Model.cellMap;
 
-    public static void run(MapGraph G, int C) {
+    public static String[] run(MapGraph G, int C) {
         BestPath_v2.G = G;
         BestPath_v2.C = C;
         System.out.println("---Best-Path 2.0 Search---\n");
@@ -23,7 +29,7 @@ public class BestPath_v2 {
         System.out.println("Tour Cost: " + tourCost);
         System.out.println(result);
         System.out.println("Execution time: " + (double) (end - start) * Math.pow(10, -6) + "ms\n");
-    }
+        return new String[]{"Tour Cost: "+tourCost,result};}
 
     private static String search() {
         /*
@@ -58,6 +64,10 @@ public class BestPath_v2 {
 
         int vehicleCount = 0;
         while (visitedID.size() != costV.length - 1) {
+            Random r = new Random();
+            int red = r.nextInt(256);
+            int green = r.nextInt(256);
+            int blue = r.nextInt(256);
             //while all vertices haven't been visited
             outString.append("Vehicle ").append(++vehicleCount).append("\n"); //EACH LOOP REPRESENTS ONE DELIVERY VEHICLE
 
@@ -88,6 +98,8 @@ public class BestPath_v2 {
                 }
                 visitedID.add(nextVertex.ID); //the nextVertex has been visited.
                 outString.append(" --> ").append(nextVertex);
+                CircleNode currentCircle = (CircleNode) cellNodesMap.get(nextVertex.ID);
+                currentCircle.setColour(red,green,blue);
 
                 //update the values
                 dT = costV[i]; //update total distance travelled

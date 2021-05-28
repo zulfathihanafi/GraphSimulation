@@ -19,7 +19,7 @@ public class Model {
     List<Edge> addedEdges;
     List<Edge> removedEdges;
 
-    Map<Integer,CellNodes> cellMap; // <id,cell>
+   public static Map<Integer,CellNodes> cellMap; // <id,cell>
 
     public Model() {
 
@@ -76,10 +76,6 @@ public class Model {
 
                 CircleNode newCell = new CircleNode(id,xCoordinate,yCoordinate);
                 addCell(newCell);
-
-
-
-
 
     }
 

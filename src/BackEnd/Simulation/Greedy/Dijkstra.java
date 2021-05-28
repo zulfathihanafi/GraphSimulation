@@ -2,9 +2,11 @@ package BackEnd.Simulation.Greedy;
 
 import BackEnd.GraphComponent.*;
 import BackEnd.map.*;
+import Classes.CellNodes;
+import Classes.CircleNode;
+import Classes.Model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 //Dijkstra's Traversal Algorithm
 public class Dijkstra {
@@ -12,6 +14,7 @@ public class Dijkstra {
     private static MapGraph G;
     private static int C;
     private static double tourCost;
+    static Map<Integer,CellNodes> cellNodesMap = Model.cellMap;
 
     public static String[] run(MapGraph G, int C) {
         tourCost = 0; //just in case if we want to do multiple Dijkstra searches (to reset)
@@ -61,6 +64,10 @@ public class Dijkstra {
 
         int vehicleCount = 0;
         while (visitedID.size() != distV.length - 1) {
+            Random r = new Random();
+            int red = r.nextInt(256);
+            int green = r.nextInt(256);
+            int blue = r.nextInt(256);
             //while all vertices haven't been visited
             outString.append("Vehicle ").append(++vehicleCount).append("\n"); //EACH LOOP REPRESENTS ONE DELIVERY VEHICLE
 
@@ -88,7 +95,8 @@ public class Dijkstra {
                 }
                 visitedID.add(nextVertex.ID); //the nextVertex has been visited.
                 outString.append(" --> ").append(nextVertex);
-
+                CircleNode currentCircle = (CircleNode) cellNodesMap.get(nextVertex.ID);
+                currentCircle.setColour(red,green,blue);
                 //update the values
                 dT = distV[i]; //update total distance travelled
                 tempC -= nextVertex.capacity; //deduct capacity
@@ -98,6 +106,7 @@ public class Dijkstra {
                     //if the vehicle returns to the depot, break the loop/go to the next vehicle
                     break;
             }
+
             visitedID.remove((Integer) 0); //used Integer to make it as an object
             outString.append("\nCapacity: ").append(C - tempC);
             outString.append("\nCost: ").append(dT).append("\n");

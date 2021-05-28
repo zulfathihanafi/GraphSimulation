@@ -2,9 +2,14 @@ package BackEnd.Simulation.Greedy;
 
 import BackEnd.GraphComponent.*;
 import BackEnd.map.*;
+import Classes.CellNodes;
+import Classes.CircleNode;
+import Classes.Model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Random;
 
 //A* Traversal Algorithm
 public class A_star {
@@ -12,8 +17,8 @@ public class A_star {
     private static MapGraph G;
     private static int C;
     private static double tourCost;
-
-    public static void run(MapGraph G, int C) {
+    static Map<Integer, CellNodes> cellNodesMap = Model.cellMap;
+    public static String[] run(MapGraph G, int C) {
         tourCost = 0; //just in case if we want to do multiple A* searches (to reset)
         A_star.G = G;
         A_star.C = C;
@@ -25,7 +30,7 @@ public class A_star {
         System.out.println("Tour Cost: " + tourCost);
         System.out.println(result);
         System.out.println("Execution time: " + (double) (end - start) * Math.pow(10, -6) + "ms\n");
-    }
+        return new String[]{"Tour Cost: "+tourCost,result};}
 
     private static String search() {
         /*
@@ -62,6 +67,10 @@ public class A_star {
 
         int vehicleCount = 0;
         while (visitedID.size() != costV.length - 1) {
+            Random r = new Random();
+            int red = r.nextInt(256);
+            int green = r.nextInt(256);
+            int blue = r.nextInt(256);
             //while all vertices haven't been visited
             outString.append("Vehicle ").append(++vehicleCount).append("\n"); //EACH LOOP REPRESENTS ONE DELIVERY VEHICLE
 
@@ -92,13 +101,15 @@ public class A_star {
                 }
                 visitedID.add(nextVertex.ID); //the nextVertex has been visited.
                 outString.append(" --> ").append(nextVertex);
-
+                CircleNode currentCircle = (CircleNode) cellNodesMap.get(nextVertex.ID);
+                currentCircle.setColour(red,green,blue);
                 //update the values
                 dT = costV[i] - tempCap; //update total distance travelled
                 tempC -= nextVertex.capacity; //deduct capacity
                 currentVertex = nextVertex;
 
                 if (currentVertex.ID == 0)
+
                     //if the vehicle returns to the depot, break the loop/go to the next vehicle
                     break;
             }
