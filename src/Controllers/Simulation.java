@@ -2,6 +2,7 @@ package Controllers;
 
 
 import BackEnd.GraphComponent.MapVertex;
+import BackEnd.Simulation.Basic.BlindDFS;
 import BackEnd.Simulation.Greedy.*;
 import BackEnd.map.MapGraph;
 import Classes.*;
@@ -48,7 +49,7 @@ public class Simulation implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //comboBox initializer
-        String[] algorithm = {"A Star","Best First","Best Path","Best Path v2","Dijkstra","Greedy Search"};
+        String[] algorithm = {"Basic Simulation (DFS)","A Star","Best First","Best Path","Best Path v2","Dijkstra","Greedy Search"};
         algorithmInteger = new HashMap<>();
         for(int i=0;i<algorithm.length;i++){
             algorithmInteger.put(algorithm[i],i);
@@ -158,27 +159,31 @@ public class Simulation implements Initializable {
     public void startButtonPressed(ActionEvent event) {
         String algorithm = AlgorithmChooserBox.getValue();
         System.out.println(algorithm);
-        String[] answer = new String[2];
+        String[] answer = new String[3];
         int getAlgorithm = algorithmInteger.get(algorithm);
         switch (getAlgorithm){
-            case 0 :
+            case 0:
+                answer = BlindDFS.run(map,N,C);
+                break;
+            case 1 :
                 answer = A_star.run(map,C);
                 break;
-            case 1:
+            case 2:
                 answer = BestFirst.run(map,C);
                 break;
-            case 2 :
+            case 3 :
                 answer = BestPath.run(map,C);
                 break;
-            case 3:
+            case 4:
                 answer = BestPath_v2.run(map,C);
                 break;
-            case 4 :
+            case 5 :
                 answer = Dijkstra.run(map,C);
                 break;
-            case 5:
+            case 6:
                 answer = GreedySearch.run(map,C);
                 break;
+
         }
         String text = "";
         for(int i=0;i<answer.length;i++){

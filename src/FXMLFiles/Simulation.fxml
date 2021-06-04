@@ -15,9 +15,12 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <ScrollPane layoutX="79.0" layoutY="90.0" prefHeight="568.0" prefWidth="514.0">
+                  <ScrollPane layoutX="26.0" layoutY="62.0" prefHeight="625.0" prefWidth="620.0">
                      <content>
-                        <Text fx:id="AnswerText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="506.13671875" />
+                        <Text fx:id="AnswerText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="617.13671875">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font></Text>
                      </content>
                   </ScrollPane>
                   <ComboBox fx:id="AlgorithmChooserBox" layoutX="161.0" layoutY="27.0" prefHeight="25.0" prefWidth="298.0" promptText="Choose your algorithm" />

@@ -29,7 +29,7 @@ public class BestPath_v2 {
         System.out.println("Tour Cost: " + tourCost);
         System.out.println(result);
         System.out.println("Execution time: " + (double) (end - start) * Math.pow(10, -6) + "ms\n");
-        return new String[]{"Tour Cost: "+tourCost,result};}
+        return new String[]{"Tour Cost: "+tourCost,result,"Execution time: " + (double) (end - start) * Math.pow(10, -6) + "ms\n"};}
 
     private static String search() {
         /*
