@@ -27,6 +27,7 @@ public class BlindDFS {
 
         System.out.println("---Blind DFS Search---\n");
         long start = System.nanoTime();
+        tourCost = 0; // to ensure that repetitive run wil not effect result
         String result = search();
         long end = System.nanoTime();
 

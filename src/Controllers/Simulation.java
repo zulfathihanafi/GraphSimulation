@@ -3,6 +3,7 @@ package Controllers;
 
 import BackEnd.GraphComponent.MapVertex;
 import BackEnd.Simulation.Basic.BlindDFS;
+import BackEnd.Simulation.Basic.DepthFirst;
 import BackEnd.Simulation.Greedy.*;
 import BackEnd.map.MapGraph;
 import Classes.*;
@@ -15,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -38,6 +40,8 @@ public class Simulation implements Initializable {
     public Button start_button;
     public Text back_text;
     private static MapGraph map = new MapGraph();
+    public ProgressBar progressSecond;
+    public Text secondIndicator;
 
     private String textFileDirectory = FirstChooseFile.textFileDirectory;
 
@@ -157,13 +161,17 @@ public class Simulation implements Initializable {
     }
 
     public void startButtonPressed(ActionEvent event) {
+
         String algorithm = AlgorithmChooserBox.getValue();
         System.out.println(algorithm);
         String[] answer = new String[3];
         int getAlgorithm = algorithmInteger.get(algorithm);
+
         switch (getAlgorithm){
             case 0:
-                answer = BlindDFS.run(map,N,C);
+                DepthFirst depthFirst = new DepthFirst(map,C,AnswerText);
+                progressSecond.progressProperty().bind(depthFirst.progressProperty());
+                new Thread(depthFirst).start();
                 break;
             case 1 :
                 answer = A_star.run(map,C);
@@ -185,16 +193,17 @@ public class Simulation implements Initializable {
                 break;
 
         }
-        String text = "";
-        for(int i=0;i<answer.length;i++){
-            text+=answer[i]+"\n";
+
+        if(getAlgorithm!=0) {
+            String text = algorithm+"\n";
+            for (int i = 0; i < answer.length; i++) {
+                text += answer[i] + "\n";
+            }
+
+            AnswerText.setText(text);
         }
-
-        AnswerText.setText(text);
-
     }
     //File textFile = new File(FirstChooseFile.textFileDirectory);
-
 
 
 
