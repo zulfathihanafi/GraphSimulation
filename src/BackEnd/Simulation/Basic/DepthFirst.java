@@ -240,7 +240,7 @@ public class DepthFirst extends Task<String[]> {
             if (nodes[i] == 0) {
                 continue;
             }
-            if (visited.contains(" " + nodes[i])) {
+            if (visited.contains(" " + nodes[i]+",")) {
                 return true;
             }
 
@@ -250,7 +250,7 @@ public class DepthFirst extends Task<String[]> {
     }
     private boolean StringContainAllNodes(String visited){
         for(int i=0;i<G.size();i++){
-            if(!visited.contains(" "+i)) {
+            if(!visited.contains(" "+i) || !visited.contains(" 1,")) {
                 return false;
             }
 
