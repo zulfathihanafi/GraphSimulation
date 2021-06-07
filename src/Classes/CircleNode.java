@@ -20,7 +20,9 @@ public class CircleNode extends CellNodes{
     public void setColour (int red, int green, int blue){
         view.setFill(Color.rgb(red, green, blue));
     }
-
+    public void setDiameter (double diameter){
+        view.setRadius(diameter);
+    }
 
 
 }

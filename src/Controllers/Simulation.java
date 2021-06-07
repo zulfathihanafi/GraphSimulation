@@ -119,7 +119,9 @@ public class Simulation implements Initializable {
             x = Normalizer.minMax(x,MaxRange);
             y = Normalizer.minMax(y,MaxRange);
             for(int i=0;i<N;i++){
-                model.addCell(i,x[i],y[i]);
+                CellNodes cell = new CircleNode(i,x[i],y[i]);
+                model.addCell(cell);
+                if(i==0)  ((CircleNode) cell).setDiameter(25);
             }
 
 

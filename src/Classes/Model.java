@@ -79,7 +79,7 @@ public class Model {
 
     }
 
-    private void addCell(CellNodes cell) {
+    public void addCell(CellNodes cell) {
 
         addedCells.add(cell);
 
