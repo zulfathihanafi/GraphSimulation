@@ -78,7 +78,7 @@ public class BestFirst {
             int green = r.nextInt(256);
             int blue = r.nextInt(256);
             //while all vertices haven't been visited
-            outString.append("Vehicle ").append(++vehicleCount).append("\n"); //EACH LOOP REPRESENTS ONE DELIVERY VEHICLE
+            outString.append("\nVehicle ").append(++vehicleCount).append("\n"); //EACH LOOP REPRESENTS ONE DELIVERY VEHICLE
 
             double dT = 0; //the total distance travelled
             Arrays.fill(heurV, Double.POSITIVE_INFINITY);

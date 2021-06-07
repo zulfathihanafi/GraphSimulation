@@ -29,11 +29,12 @@ public class DepthFirst extends Task<String[]> {
     private  final long maxTime = 60;
     private String[] finalAnswer;
     private Text answer;
-
-    public DepthFirst(MapGraph G, int C,Text answer) {
+    private Text secondIndicator;
+    public DepthFirst(MapGraph G, int C,Text answer,Text secondIndicator) {
         this.G = G;
         this.C = C;
         this.answer = answer;
+        this.secondIndicator = secondIndicator;
     }
 
     public void run(MapGraph G, int C) {
@@ -65,6 +66,7 @@ public class DepthFirst extends Task<String[]> {
         for( String element : route){
             System.out.println(element);
         }
+
         String[] bestTour = route.get(route.size()-1).split(" ");
         for(int i=0;i< bestTour.length;i++){
             Random r = new Random();
@@ -72,7 +74,7 @@ public class DepthFirst extends Task<String[]> {
             int green = r.nextInt(256);
             int blue = r.nextInt(256);
             Path currPath = pathList.get(Integer.parseInt(bestTour[i]));
-           sb.append("\nVehicle ").append(i + 1).append("\n");
+           sb.append("\n\nVehicle ").append(i + 1).append("\n");
             sb.append(currPath);
             Integer[] nodeId = currPath.getNodes();
 
@@ -88,12 +90,10 @@ public class DepthFirst extends Task<String[]> {
 
 
 
-        finalAnswer = new String[]{"Tour Cost : "+tourDistance,sb.toString(),""};
-        String text = "Depth First Search\n";
-        for(int i=0;i<finalAnswer.length;i++){
-            text+=finalAnswer[i]+"\n";
-        }
+        
+        String text = "Depth First Search\n"+"Tour Cost : "+tourDistance+sb.toString();
 
+        System.out.println(text);
         answer.setText(text);
     }
     //generate tree (limiting the capacity)
@@ -211,6 +211,7 @@ public class DepthFirst extends Task<String[]> {
         end = System.currentTimeMillis();
         time = ((end - start)/1000);
         System.out.println(time);
+        secondIndicator.setText(time+"s");
         updateProgress(time,maxTime);
         if(time < maxTime) {
             Path currentPath = pathList.get(pathID);

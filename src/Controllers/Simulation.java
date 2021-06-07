@@ -169,7 +169,7 @@ public class Simulation implements Initializable {
 
         switch (getAlgorithm){
             case 0:
-                DepthFirst depthFirst = new DepthFirst(map,C,AnswerText);
+                DepthFirst depthFirst = new DepthFirst(map,C,AnswerText,secondIndicator);
                 progressSecond.progressProperty().bind(depthFirst.progressProperty());
                 new Thread(depthFirst).start();
                 break;
