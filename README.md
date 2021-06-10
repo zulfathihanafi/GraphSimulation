@@ -1,4 +1,4 @@
-# GraphSimulation
+# Graph Simulation
 
-Data Structure Course
-GUI Implementation
+Data Structure Course (WIA1002)
+Creating a simulation for Vehicle Routing Problem (VRP), which uses a graph.
