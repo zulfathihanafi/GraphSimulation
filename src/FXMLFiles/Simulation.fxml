@@ -20,7 +20,7 @@
                      <content>
                         <Text fx:id="AnswerText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="617.13671875">
                            <font>
-                              <Font name="System Bold" size="20.0" />
+                              <Font name="System Bold" size="16.0" />
                            </font>
                         </Text>
                      </content>

@@ -15,14 +15,15 @@ import java.util.Random;
 public class BestFirst {
 
     private static MapGraph G;
-    private static int C;
+    private static int C,lorries;
     private static double tourCost;
     static Map<Integer, CellNodes> cellNodesMap = Model.cellMap;
 
-    public static String[] run(MapGraph G, int C) {
+    public static String[] run(MapGraph G, int C, int numberOfLorries) {
         tourCost = 0; //just in case if we want to do multiple A* searches (to reset)
         BestFirst.G = G;
         BestFirst.C = C;
+        BestFirst.lorries = numberOfLorries;
         System.out.println("---Best-First Search---\n");
         long start = System.nanoTime();
         String result = search();
@@ -71,23 +72,35 @@ public class BestFirst {
         ArrayList<Integer> visitedID = new ArrayList<>(); //a list of visited vertices (based on ID) except depot
         StringBuilder outString = new StringBuilder();
 
-        int vehicleCount = 0;
+        int vehicleCount = 0, lorryCount = 0;
         while (visitedID.size() != heurV.length - 1) {
             Random r = new Random();
             int red = r.nextInt(256);
             int green = r.nextInt(256);
             int blue = r.nextInt(256);
             //while all vertices haven't been visited
-            outString.append("\nVehicle ").append(++vehicleCount).append("\n"); //EACH LOOP REPRESENTS ONE DELIVERY VEHICLE
-
+            int tempC;
+            boolean lorryUsed = false;
+            outString.append("---------------------\n");
+            if (lorries != 0) {
+                //if there are still lorries to be dispatched out:
+                tempC = 2 * C; //to deduct the capacity in lorry whenever a vertex is visited
+                outString.append("Vehicle ").append(++vehicleCount).append(" (Lorry ").append(++lorryCount).append(")\n");
+                lorries--;
+                lorryUsed = true;
+            } else {
+                tempC = C;
+                outString.append("Vehicle ").append(++vehicleCount).append("\n");
+            }
             double dT = 0; //the total distance travelled
             Arrays.fill(heurV, Double.POSITIVE_INFINITY);
 
             MapVertex currentVertex = G.getHead();
             MapVertex nextVertex = G.getHead();
-            int tempC = C; //to deduct the capacity in vehicle whenever a vertex is visited
 
             outString.append(currentVertex);
+            int totalCap = 0;
+            boolean dispatched = false;
             for (int i = 0; i < G.size(); i++) {
                 //go through every vertices in the graph
                 MapEdge currentEdge = currentVertex.EdgeList.get(0);
@@ -96,10 +109,15 @@ public class BestFirst {
                     //go through every edges connected to current vertex
                     currentEdge = currentVertex.EdgeList.get(j); //starting from the first edge
 
+                    if (lorryUsed && currentEdge.destination.narrowArea)
+                        //if lorry is currently used and the destination is in the narrow area, don't go here
+                        continue;
+
                     if (tempC >= currentEdge.destination.capacity && currentEdge.destination.capacity < heurV[i] && !visitedID.contains(currentEdge.destination.ID) && currentEdge.destination.ID != 0) {
                         /* IF (capacity >= demand) AND (capacity < expected_path_cost) AND (the destination hasn't been visited yet) AND (the dest is not the depot):
                                 choose this path.
                         */
+                        dispatched = true;
                         nextVertex = currentEdge.destination; // path to go
                         heurV[i] = currentEdge.destination.capacity;  //update the path cost value the vertex holds
                         tempD = dT + currentEdge.dist;
@@ -114,6 +132,12 @@ public class BestFirst {
                     heurV[i] = currentEdge.destination.capacity;  //update the path cost value the vertex holds
                     tempD = dT + currentEdge.dist;
                 }
+
+                if (!dispatched && nextVertex.ID == 0) {
+                    outString.append(" --X-> NOT DISPATCHED");
+                    break;
+                }
+
                 visitedID.add(nextVertex.ID); //the nextVertex has been visited.
                 outString.append(" --> ").append(nextVertex);
                 CircleNode currentCircle = (CircleNode) cellNodesMap.get(nextVertex.ID);
@@ -121,14 +145,14 @@ public class BestFirst {
                 //update the values
                 dT = tempD; //update total distance travelled
                 tempC -= nextVertex.capacity; //deduct capacity
+                totalCap += nextVertex.capacity;
                 currentVertex = nextVertex;
 
-                if (currentVertex.ID == 0)
-                    //if the vehicle returns to the depot, break the loop/go to the next vehicle
+                if (nextVertex.ID == 0)
                     break;
             }
             visitedID.remove((Integer) 0); //used Integer to make it as an object
-            outString.append("\nCapacity: ").append(C - tempC);
+            outString.append("\nCapacity: ").append(totalCap);
             outString.append("\nCost: ").append(dT).append("\n");
             tourCost += dT;
         }

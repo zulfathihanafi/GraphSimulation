@@ -5,6 +5,7 @@ import BackEnd.GraphComponent.MapVertex;
 import BackEnd.Simulation.Basic.BlindDFS;
 import BackEnd.Simulation.Basic.DepthFirst;
 import BackEnd.Simulation.Greedy.*;
+import BackEnd.Simulation.MCTS.NRPA;
 import BackEnd.map.MapGraph;
 import Classes.*;
 import Tools.*;
@@ -53,7 +54,7 @@ public class Simulation implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //comboBox initializer
-        String[] algorithm = {"Basic Simulation (DFS)","A Star","Best First","Best Path","Best Path v2","Dijkstra","Greedy Search"};
+        String[] algorithm = {"Blind DFS","Revised DFS","A Star","Best First","Best Path","Dijkstra","MCTS NRPA"};
         algorithmInteger = new HashMap<>();
         for(int i=0;i<algorithm.length;i++){
             algorithmInteger.put(algorithm[i],i);
@@ -168,35 +169,35 @@ public class Simulation implements Initializable {
         System.out.println(algorithm);
         String[] answer = new String[3];
         int getAlgorithm = algorithmInteger.get(algorithm);
-
+        int lorries = 5;
         switch (getAlgorithm){
             case 0:
+                answer = BlindDFS.run(map,N,C,lorries);
+                break;
+            case 1:
                 DepthFirst depthFirst = new DepthFirst(map,C,AnswerText,secondIndicator);
                 progressSecond.progressProperty().bind(depthFirst.progressProperty());
                 new Thread(depthFirst).start();
                 break;
-            case 1 :
-                answer = A_star.run(map,C);
+            case 2 :
+                answer = A_star.run(map,C,lorries);
                 break;
-            case 2:
-                answer = BestFirst.run(map,C);
+            case 3:
+                answer = BestFirst.run(map,C,lorries);
                 break;
-            case 3 :
-                answer = BestPath.run(map,C);
-                break;
-            case 4:
-                answer = BestPath_v2.run(map,C);
+            case 4 :
+                answer = BestPath.run(map,C,lorries);
                 break;
             case 5 :
-                answer = Dijkstra.run(map,C);
+                answer = Dijkstra.run(map,C,lorries);
                 break;
             case 6:
-                answer = GreedySearch.run(map,C);
+                NRPA.run(map,N,C);
                 break;
 
         }
 
-        if(getAlgorithm!=0) {
+        if(getAlgorithm!=1) {
             String text = algorithm+"\n";
             for (int i = 0; i < answer.length; i++) {
                 text += answer[i] + "\n";

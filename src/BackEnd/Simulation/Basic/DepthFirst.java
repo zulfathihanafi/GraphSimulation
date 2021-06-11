@@ -60,7 +60,7 @@ public class DepthFirst extends Task<String[]> {
             bestTour(i,"","",0.0);
 
         }
-        System.out.println("rtime"+(double)time/60 * 100);
+        System.out.println("Current Time"+(double)time/60 * 100);
         //printAllEdge();
         //printing the best tour
         for( String element : route){
@@ -178,7 +178,6 @@ public class DepthFirst extends Task<String[]> {
 
         return Math.sqrt((dx * dx) + (dy * dy));
     }
-
 
     private boolean arrayPathChecker(Path from, Path dest) {
         Integer[] a = from.getNodes();
