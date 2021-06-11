@@ -58,7 +58,7 @@ public class NRPA extends Task<String> {
         StringBuilder answerText = new StringBuilder();
         Tour best_tour = search(level, iterations);
         System.out.println(best_tour + "\nTotal Cost: " + best_tour.getTotalDistance());
-        answerText.append("\nTour Cost: ").append(best_tour.getTotalDistance()).append(best_tour);
+        answerText.append("NRPA MCTS\nTour Cost: ").append(best_tour.getTotalDistance()).append(best_tour);
 
         answer.setText(answerText.toString());
         colouringTheNodes();
