@@ -6,6 +6,7 @@ import BackEnd.GraphComponent.Tour;
 import BackEnd.map.MapGraph;
 import Classes.CellNodes;
 import Classes.CircleNode;
+import Classes.Edge;
 import Classes.Model;
 import javafx.concurrent.Task;
 import javafx.scene.text.Text;
@@ -20,6 +21,8 @@ public class NRPA extends Task<String> {
 
     private static ArrayList<Integer> checkedID;
     static Map<Integer, CellNodes> cellNodesMap = Model.cellMap;
+    static Map<String, Edge> edgesMap = Model.edgesMap;
+
     private static double[][][] policy;
     private static double[][] globalPolicy;
     private Tour bestTour;
@@ -57,6 +60,16 @@ public class NRPA extends Task<String> {
         }
         StringBuilder answerText = new StringBuilder();
         Tour best_tour = search(level, iterations);
+        setAllEdgeFalse();
+
+        List<List<MapVertex>> routeList = best_tour.getRoute();
+        for(int i=0;i< routeList.size();i++){
+            List<MapVertex> currentRoute = routeList.get(i);
+            for(int j=0;j< currentRoute.size()-1;j++){
+                edgesMap.get(currentRoute.get(j).ID+" "+currentRoute.get(j+1).ID).setVisible(true);
+            }
+        }
+
         System.out.println(best_tour + "\nTotal Cost: " + best_tour.getTotalDistance());
         answerText.append("NRPA MCTS\nTour Cost: ").append(best_tour.getTotalDistance()).append(best_tour);
 
@@ -253,6 +266,14 @@ public class NRPA extends Task<String> {
         }
     }
 
+    private static void setAllEdgeFalse(){
+        for (Map.Entry<String, Edge> entry : edgesMap.entrySet()) {
+            Edge currentEdge = entry.getValue();
+            currentEdge.setVisible(false);
+        }
+
+
+    }
     @Override
     protected String call() throws Exception {
         run(G, N, C);

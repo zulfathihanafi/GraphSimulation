@@ -4,6 +4,7 @@ import BackEnd.GraphComponent.*;
 import BackEnd.map.*;
 import Classes.CellNodes;
 import Classes.CircleNode;
+import Classes.Edge;
 import Classes.Model;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class BestFirst {
     private static int C,lorries;
     private static double tourCost;
     static Map<Integer, CellNodes> cellNodesMap = Model.cellMap;
-
+    static Map<String, Edge> edgesMap = Model.edgesMap;
     public static String[] run(MapGraph G, int C, int numberOfLorries) {
         tourCost = 0; //just in case if we want to do multiple A* searches (to reset)
         BestFirst.G = G;
@@ -26,6 +27,7 @@ public class BestFirst {
         BestFirst.lorries = numberOfLorries;
         System.out.println("---Best-First Search---\n");
         long start = System.nanoTime();
+        setAllEdgeFalse();
         String result = search();
         long end = System.nanoTime();
 
@@ -142,6 +144,7 @@ public class BestFirst {
                 outString.append(" --> ").append(nextVertex);
                 CircleNode currentCircle = (CircleNode) cellNodesMap.get(nextVertex.ID);
                 currentCircle.setColour(red,green,blue);
+                edgesMap.get(currentVertex.ID+" "+nextVertex.ID).setVisible(true);
                 //update the values
                 dT = tempD; //update total distance travelled
                 tempC -= nextVertex.capacity; //deduct capacity
@@ -157,5 +160,14 @@ public class BestFirst {
             tourCost += dT;
         }
         return outString.toString();
+    }
+
+    private static void setAllEdgeFalse(){
+        for (Map.Entry<String, Edge> entry : edgesMap.entrySet()) {
+            Edge currentEdge = entry.getValue();
+            currentEdge.setVisible(false);
+        }
+
+
     }
 }

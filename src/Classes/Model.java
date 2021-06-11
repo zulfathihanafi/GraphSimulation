@@ -19,8 +19,8 @@ public class Model {
     List<Edge> addedEdges;
     List<Edge> removedEdges;
 
-   public static Map<Integer,CellNodes> cellMap; // <id,cell>
-
+    public static Map<Integer,CellNodes> cellMap; // <id,cell>
+    public static Map<String,Edge> edgesMap;
     public Model() {
 
         //graphParent = new CellNodes( 0,0,0);
@@ -40,6 +40,7 @@ public class Model {
         removedEdges = new ArrayList<>();
 
         cellMap = new HashMap<>(); // <id,cell>
+        edgesMap = new HashMap<>();
 
     }
 
@@ -95,7 +96,7 @@ public class Model {
         Edge edge = new Edge( sourceCell, targetCell);
 
         addedEdges.add( edge);
-
+        edgesMap.put(sourceId+" "+targetId,edge);
     }
 
     /**

@@ -8,6 +8,7 @@ import BackEnd.GraphComponent.*;
 import BackEnd.map.MapGraph;
 import Classes.CellNodes;
 import Classes.CircleNode;
+import Classes.Edge;
 import Classes.Model;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class BlindDFS {
     private static int N, C, lorries;
     private static double tourCost;
     static Map<Integer, CellNodes> cellNodesMap = Model.cellMap;
+    static Map<String, Edge> edgesMap = Model.edgesMap;
     public static String[] run(MapGraph G, int N, int C, int numberOfLorries) {
         BlindDFS.lorries = numberOfLorries;
         BlindDFS.G = G;
@@ -29,6 +31,7 @@ public class BlindDFS {
         System.out.println("---Blind DFS Search---\n");
         long start = System.nanoTime();
         tourCost = 0; // to ensure that repetitive run wil not effect result
+        setAllEdgeFalse();
         String result = search();
         long end = System.nanoTime();
 
@@ -102,6 +105,7 @@ public class BlindDFS {
                 outString.append(" --> ").append(nextVertex);
                 CircleNode currentCircle = (CircleNode) cellNodesMap.get(nextVertex.ID);
                 currentCircle.setColour(red,green,blue);
+                edgesMap.get(currentVertex.ID+" "+nextVertex.ID).setVisible(true);
                 //update the values
                 dT += tempD; //new total distance travelled
                 tempC -= nextVertex.capacity; //deduct capacity
@@ -117,5 +121,14 @@ public class BlindDFS {
             tourCost += dT;
         }
         return outString.toString();
+    }
+
+    private static void setAllEdgeFalse(){
+        for (Map.Entry<String, Edge> entry : edgesMap.entrySet()) {
+            Edge currentEdge = entry.getValue();
+            currentEdge.setVisible(false);
+        }
+
+
     }
 }

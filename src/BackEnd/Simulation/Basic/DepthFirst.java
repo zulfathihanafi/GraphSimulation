@@ -5,6 +5,7 @@ import BackEnd.GraphComponent.*;
 import BackEnd.map.*;
 import Classes.CellNodes;
 import Classes.CircleNode;
+import Classes.Edge;
 import Classes.Model;
 import Controllers.Simulation;
 import javafx.application.Platform;
@@ -30,7 +31,7 @@ public class DepthFirst extends Task<String[]> {
     private String[] finalAnswer;
     private Text answer;
     private Text secondIndicator;
-
+    static Map<String, Edge> edgesMap = Model.edgesMap;
     public DepthFirst(MapGraph G, int C,Text answer,Text secondIndicator) {
         this.G = G;
         this.C = C;
@@ -69,13 +70,14 @@ public class DepthFirst extends Task<String[]> {
         }
 
         String[] bestTour = route.get(route.size()-1).split(" ");
-        for(int i=0;i< bestTour.length;i++){
+        setAllEdgeFalse();
+        for(int i=0; i< bestTour.length;i++){
             Random r = new Random();
             int red = r.nextInt(256);
             int green = r.nextInt(256);
             int blue = r.nextInt(256);
             Path currPath = pathList.get(Integer.parseInt(bestTour[i]));
-           sb.append("\n\nVehicle ").append(i + 1).append("\n");
+            sb.append("\n\nVehicle ").append(i + 1).append("\n");
             sb.append(currPath);
             Integer[] nodeId = currPath.getNodes();
 
@@ -84,13 +86,11 @@ public class DepthFirst extends Task<String[]> {
                 CircleNode currentCircle = (CircleNode) cellNodesMap.get(integer);
                 currentCircle.setColour(red, green, blue);
             }
+
+            for(int j=0;j<nodeId.length-1;j++){
+                edgesMap.get(nodeId[j]+" "+nodeId[j+1]).setVisible(true);
+            }
         }
-
-
-
-
-
-
         
         String text = "Depth First Search\n"+"Tour Cost : "+tourDistance+sb.toString();
 
@@ -179,7 +179,6 @@ public class DepthFirst extends Task<String[]> {
 
         return Math.sqrt((dx * dx) + (dy * dy));
     }
-
     private boolean arrayPathChecker(Path from, Path dest) {
         Integer[] a = from.getNodes();
         Integer[] b = dest.getNodes();
@@ -235,7 +234,6 @@ public class DepthFirst extends Task<String[]> {
 
         }
     }
-
     private boolean haveIntegerInString(Integer[] nodes, String visited) {
         for (int i = 0; i < nodes.length; i++) {
             if (nodes[i] == 0) {
@@ -259,6 +257,14 @@ public class DepthFirst extends Task<String[]> {
         return true;
     }
 
+    private static void setAllEdgeFalse(){
+        for (Map.Entry<String, Edge> entry : edgesMap.entrySet()) {
+            Edge currentEdge = entry.getValue();
+            currentEdge.setVisible(false);
+        }
+
+
+    }
 
     @Override
     protected String[] call() throws Exception {

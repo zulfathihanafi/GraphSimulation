@@ -4,6 +4,7 @@ import BackEnd.GraphComponent.*;
 import BackEnd.map.*;
 import Classes.CellNodes;
 import Classes.CircleNode;
+import Classes.Edge;
 import Classes.Model;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class A_star {
     private static int C,lorries;
     private static double tourCost;
     static Map<Integer, CellNodes> cellNodesMap = Model.cellMap;
-
+    static Map<String, Edge> edgesMap = Model.edgesMap;
     public static String[] run(MapGraph G, int C, int numberOfLorries) {
         tourCost = 0; //just in case if we want to do multiple A* searches (to reset)
         A_star.lorries = numberOfLorries;
@@ -26,6 +27,7 @@ public class A_star {
         A_star.C = C;
         System.out.println("---A* Search---\n");
         long start = System.nanoTime();
+        setAllEdgeFalse();
         String result = search();
         long end = System.nanoTime();
 
@@ -129,6 +131,8 @@ public class A_star {
                 outString.append(" --> ").append(nextVertex);
                 CircleNode currentCircle = (CircleNode) cellNodesMap.get(nextVertex.ID);
                 currentCircle.setColour(red,green,blue);
+
+                edgesMap.get(currentVertex.ID+" "+nextVertex.ID).setVisible(true);
                 //update the values
                 dT = costV[i] - tempCap; //update total distance travelled
                 tempC -= nextVertex.capacity; //deduct capacity
@@ -145,4 +149,14 @@ public class A_star {
         }
         return outString.toString();
     }
+
+    private static void setAllEdgeFalse(){
+        for (Map.Entry<String, Edge> entry : edgesMap.entrySet()) {
+            Edge currentEdge = entry.getValue();
+            currentEdge.setVisible(false);
+        }
+
+
+    }
+
 }
