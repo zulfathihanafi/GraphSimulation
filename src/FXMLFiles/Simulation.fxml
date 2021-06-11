@@ -27,7 +27,7 @@
                   </ScrollPane>
                   <ComboBox fx:id="AlgorithmChooserBox" layoutX="161.0" layoutY="27.0" prefHeight="25.0" prefWidth="298.0" promptText="Choose your algorithm" />
                   <Button fx:id="start_button" layoutX="498.0" layoutY="27.0" mnemonicParsing="false" onAction="#startButtonPressed" prefHeight="25.0" prefWidth="76.0" text="Start" />
-                  <Text fx:id="back_text" fill="#0066cc" layoutX="26.0" layoutY="723.0" onMouseClicked="#backTextPressed" strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;&lt; Choose another file" wrappingWidth="162.005859375">
+                  <Text fx:id="back_text" fill="#0066cc" layoutX="26.0" layoutY="723.0" onMouseClicked="#backTextPressed" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="162.005859375">
                      <font>
                         <Font size="15.0" />
                      </font>

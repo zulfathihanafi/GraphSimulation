@@ -144,6 +144,7 @@ public class BestFirst {
                 outString.append(" --> ").append(nextVertex);
                 CircleNode currentCircle = (CircleNode) cellNodesMap.get(nextVertex.ID);
                 currentCircle.setColour(red,green,blue);
+               // System.out.println("debug "+currentVertex.ID+" "+nextVertex.ID);
                 edgesMap.get(currentVertex.ID+" "+nextVertex.ID).setVisible(true);
                 //update the values
                 dT = tempD; //update total distance travelled
