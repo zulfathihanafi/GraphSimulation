@@ -192,12 +192,14 @@ public class Simulation implements Initializable {
                 answer = Dijkstra.run(map,C,lorries);
                 break;
             case 6:
-                NRPA.run(map,N,C);
+                NRPA nrpa = new NRPA(map,N,C,AnswerText,secondIndicator);
+                progressSecond.progressProperty().bind(nrpa.progressProperty());
+                new Thread(nrpa).start();
                 break;
 
         }
 
-        if(getAlgorithm!=1) {
+        if(getAlgorithm!=1 && getAlgorithm!=6) {
             String text = algorithm+"\n";
             for (int i = 0; i < answer.length; i++) {
                 text += answer[i] + "\n";

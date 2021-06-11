@@ -4,30 +4,42 @@ import BackEnd.GraphComponent.MapEdge;
 import BackEnd.GraphComponent.MapVertex;
 import BackEnd.GraphComponent.Tour;
 import BackEnd.map.MapGraph;
+import Classes.CellNodes;
+import Classes.CircleNode;
+import Classes.Model;
+import javafx.concurrent.Task;
+import javafx.scene.text.Text;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
-public class NRPA {
-    private static MapGraph G;
-    private static int N, C;
-    private static double tourCost;
+public class NRPA extends Task<String> {
+    private MapGraph G;
+    private int N, C;
+    private double tourCost;
 
     private static ArrayList<Integer> checkedID;
-
+    static Map<Integer, CellNodes> cellNodesMap = Model.cellMap;
     private static double[][][] policy;
     private static double[][] globalPolicy;
-    private static Tour bestTour;
+    private Tour bestTour;
     static int ALPHA = 1;
     static long start;
-    public static void run(MapGraph G, int N, int C) {
+    private Text answer;
+    private Text secondIndicator;
+    double maxTime = 60.0;
+
+    public NRPA(MapGraph G, int N, int C, Text answer, Text secondIndicator) {
+        this.G = G;
+        this.N = N;
+        this.C = C;
+        this.answer = answer;
+        this.secondIndicator = secondIndicator;
+    }
+
+    public void run(MapGraph G, int N, int C) {
         start = System.nanoTime();
-        NRPA.G = G;
-        NRPA.N = N;
-        NRPA.C = C;
+
         checkedID = new ArrayList<>();
         int level = 3, iterations = 100;
 
@@ -43,13 +55,16 @@ public class NRPA {
         for (double[] ints : globalPolicy) {
             Arrays.fill(ints, 0);
         }
-
+        StringBuilder answerText = new StringBuilder();
         Tour best_tour = search(level, iterations);
         System.out.println(best_tour + "\nTotal Cost: " + best_tour.getTotalDistance());
+        answerText.append("\nTour Cost: ").append(best_tour.getTotalDistance()).append(best_tour);
 
+        answer.setText(answerText.toString());
+        colouringTheNodes();
     }
 
-    private static Tour search(int level, int iterations) {
+    private Tour search(int level, int iterations) {
 
         //Instant start = Instant.now();
 
@@ -71,7 +86,9 @@ public class NRPA {
                 long end = System.nanoTime();
                 double duration_seconds = (end - start) * Math.pow(10, -9);
                 System.out.println("Time: " + duration_seconds + "s");
-
+                secondIndicator.setText((int) duration_seconds + "s");
+                updateProgress(duration_seconds, maxTime);
+                //update here
                 if (duration_seconds > 60)
                     return bestTour;
 
@@ -133,7 +150,7 @@ public class NRPA {
 
     }
 
-    private static Tour rollout() {
+    private Tour rollout() {
         Tour newTour = new Tour();
         List<MapVertex> newRoute = new ArrayList<>();
         newRoute.add(G.getHead());
@@ -187,7 +204,7 @@ public class NRPA {
         return newTour;
     }
 
-    private static MapVertex select_next_move(MapVertex currentStop, List<Integer> possibleSuccessor) {
+    private MapVertex select_next_move(MapVertex currentStop, List<Integer> possibleSuccessor) {
         double[] probability = new double[possibleSuccessor.size()];
         double sum = 0;
         for (int i = 0; i < possibleSuccessor.size(); i++) {
@@ -220,4 +237,30 @@ public class NRPA {
         currentTour.setTotalDistance(totalDistance);
     }
 
+    private void colouringTheNodes() {
+        List<List<MapVertex>> list = bestTour.getRoute();
+        for (int i = 0; i < list.size(); i++) {
+            Random r = new Random();
+            int red = r.nextInt(256);
+            int green = r.nextInt(256);
+            int blue = r.nextInt(256);
+
+            List<MapVertex> currentRoute = list.get(i);
+            for (int j = 0; j < currentRoute.size(); j++) {
+                CircleNode currentCircle = (CircleNode) cellNodesMap.get(currentRoute.get(j).ID);
+                currentCircle.setColour(red, green, blue);
+            }
+        }
+    }
+
+    @Override
+    protected String call() throws Exception {
+        run(G, N, C);
+        return bestTour.toString();
+    }
+
+    @Override
+    public void updateProgress(double v, double v1) {
+        super.updateProgress(v, v1);
+    }
 }

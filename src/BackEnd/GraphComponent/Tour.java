@@ -1,10 +1,17 @@
 package BackEnd.GraphComponent;
 
 
+import Classes.CellNodes;
+import Classes.CircleNode;
+import Classes.Model;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class Tour {
+
     private double totalDistance;
     private List<List<MapVertex>> route;
 
@@ -25,14 +32,11 @@ public class Tour {
         return route;
     }
 
-    public void setRoute(List<List<MapVertex>> route) {
-        this.route = route;
-    }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Tour\n");
+
 
         for (int i = 0; i < route.size(); i++) {
             sb.append("\nVehicle ").append(i + 1).append("\n");
@@ -59,7 +63,7 @@ public class Tour {
         StringBuilder sb = new StringBuilder();
 
         for(int i=0;i<vertexList.size();i++){
-            sb.append("{ ID ").append(vertexList.get(i).ID).append("}");
+            sb.append("{ ID ").append(vertexList.get(i).ID).append(" }");
             if(i != vertexList.size()-1){
                 sb.append(" --> ");
             }

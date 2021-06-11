@@ -30,6 +30,7 @@ public class DepthFirst extends Task<String[]> {
     private String[] finalAnswer;
     private Text answer;
     private Text secondIndicator;
+
     public DepthFirst(MapGraph G, int C,Text answer,Text secondIndicator) {
         this.G = G;
         this.C = C;
@@ -257,19 +258,7 @@ public class DepthFirst extends Task<String[]> {
         }
         return true;
     }
-    private void printAllEdge(){
-        for(int i=0;i<pathList.size();i++){
-            Path current = pathList.get(i);
-            System.out.print("Current "+current);
-            List<Path> currentEdge = current.getPathList();
-            for(int j=0;j< currentEdge.size();j++){
-                System.out.print("Edge "+j+" "+currentEdge.get(j));
-            }
-            System.out.println();
-        }
 
-        System.out.println("----------------");
-    }
 
     @Override
     protected String[] call() throws Exception {
