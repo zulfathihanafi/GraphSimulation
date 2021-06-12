@@ -183,7 +183,7 @@ public class Simulation implements Initializable {
                 answer = A_star.run(map,C,lorries);
                 break;
             case 3:
-                answer = BestFirst.run(map,C,lorries);
+                answer = BestFirst.run(map,N,C,lorries);
                 break;
             case 4 :
                 answer = BestPath.run(map,C,lorries);

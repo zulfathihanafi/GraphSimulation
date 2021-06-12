@@ -77,7 +77,7 @@ public class MapGraph {
         }
     }
 
-    private double computeDistance(MapVertex v1, MapVertex v2) {
+    public static double computeDistance(MapVertex v1, MapVertex v2) {
         double dx = v1.coordinateX - v2.coordinateX;
         double dy = v1.coordinateY - v2.coordinateY;
 
