@@ -39,7 +39,7 @@ public class Tour {
 
 
         for (int i = 0; i < route.size(); i++) {
-            sb.append("\nVehicle ").append(i + 1).append("\n");
+            sb.append("------------------------\nVehicle ").append(i + 1).append("\n");
             sb.append(properPrintRoute(route.get(i))).append("\n");
             sb.append("Cost: ").append(distanceRoute(route.get(i))).append("\n");
         }

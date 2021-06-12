@@ -60,9 +60,6 @@ public class Simulation implements Initializable {
             algorithmInteger.put(algorithm[i],i);
         }
         AlgorithmChooserBox.getItems().setAll(algorithm);
-
-
-
         //for the graph below
         BorderPane BorderRoot = new BorderPane();
 
