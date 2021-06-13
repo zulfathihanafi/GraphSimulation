@@ -26,6 +26,7 @@ public class NRPA extends Task<String> {
     private static double[][][] policy;
     private static double[][] globalPolicy;
     private Tour bestTour;
+    private Tour best_tour_answer;
     static int ALPHA = 1;
     static long start;
     private Text answer;
@@ -58,23 +59,9 @@ public class NRPA extends Task<String> {
         for (double[] ints : globalPolicy) {
             Arrays.fill(ints, 0);
         }
-        StringBuilder answerText = new StringBuilder();
-        Tour best_tour = search(level, iterations);
-        setAllEdgeFalse();
 
-        List<List<MapVertex>> routeList = best_tour.getRoute();
-        for(int i=0;i< routeList.size();i++){
-            List<MapVertex> currentRoute = routeList.get(i);
-            for(int j=0;j< currentRoute.size()-1;j++){
-                edgesMap.get(currentRoute.get(j).ID+" "+currentRoute.get(j+1).ID).setVisible(true);
-            }
-        }
-
-        System.out.println(best_tour + "\nTotal Cost: " + best_tour.getTotalDistance());
-        answerText.append("NRPA MCTS\nTour Cost: ").append(best_tour.getTotalDistance()).append(best_tour);
-
-        answer.setText(answerText.toString());
-        colouringTheNodes();
+        best_tour_answer = search(level, iterations);
+        secondIndicator.setText("DONE!");
     }
 
     private Tour search(int level, int iterations) {
@@ -88,17 +75,17 @@ public class NRPA extends Task<String> {
             policy[level - 1] = NRPA.globalPolicy;
 
             for (int i = 0; i < iterations; i++) {
-                System.out.println("iterations " + i);
+
                 Tour new_tour = search(level - 1, i);
                 if (new_tour.getTotalDistance() < bestTour.getTotalDistance()) {
                     bestTour = new_tour;
-                    System.out.println("inside search loop\n" + bestTour);
+
                     adapt(bestTour, level);
                 }
 
                 long end = System.nanoTime();
                 double duration_seconds = (end - start) * Math.pow(10, -9);
-                System.out.println("Time: " + duration_seconds + "s");
+
                 secondIndicator.setText((int) duration_seconds + "s");
                 updateProgress(duration_seconds, maxTime);
                 //update here
@@ -283,5 +270,23 @@ public class NRPA extends Task<String> {
     @Override
     public void updateProgress(double v, double v1) {
         super.updateProgress(v, v1);
+    }
+
+    public void printing(){
+        StringBuilder answerText = new StringBuilder();
+        setAllEdgeFalse();
+        List<List<MapVertex>> routeList = best_tour_answer.getRoute();
+        for(int i=0;i< routeList.size();i++){
+            List<MapVertex> currentRoute = routeList.get(i);
+            for(int j=0;j< currentRoute.size()-1;j++){
+                edgesMap.get(currentRoute.get(j).ID+" "+currentRoute.get(j+1).ID).setVisible(true);
+            }
+        }
+
+        System.out.println(best_tour_answer + "\nTotal Cost: " + best_tour_answer.getTotalDistance());
+        answerText.append("NRPA MCTS\nTour Cost: ").append(best_tour_answer.getTotalDistance()).append(best_tour_answer);
+
+        answer.setText(answerText.toString());
+        colouringTheNodes();
     }
 }

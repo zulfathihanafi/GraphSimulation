@@ -62,40 +62,13 @@ public class DepthFirst extends Task<String[]> {
             bestTour(i,"","",0.0);
 
         }
-        System.out.println("Current Time"+(double)time/60 * 100);
+
         //printAllEdge();
         //printing the best tour
         for( String element : route){
             System.out.println(element);
         }
-
-        String[] bestTour = route.get(route.size()-1).split(" ");
-        setAllEdgeFalse();
-        for(int i=0; i< bestTour.length;i++){
-            Random r = new Random();
-            int red = r.nextInt(256);
-            int green = r.nextInt(256);
-            int blue = r.nextInt(256);
-            Path currPath = pathList.get(Integer.parseInt(bestTour[i]));
-            sb.append("\n\nVehicle ").append(i + 1).append("\n");
-            sb.append(currPath);
-            Integer[] nodeId = currPath.getNodes();
-
-            for (Integer integer : nodeId) {
-
-                CircleNode currentCircle = (CircleNode) cellNodesMap.get(integer);
-                currentCircle.setColour(red, green, blue);
-            }
-
-            for(int j=0;j<nodeId.length-1;j++){
-                edgesMap.get(nodeId[j]+" "+nodeId[j+1]).setVisible(true);
-            }
-        }
-        
-        String text = "Depth First Search\n"+"Tour Cost : "+tourDistance+sb.toString();
-
-        System.out.println(text);
-        answer.setText(text);
+        secondIndicator.setText("DONE!");
     }
     //generate tree (limiting the capacity)
     private void generateTree(int capacity, int vertexID, String currentList) {
@@ -209,7 +182,7 @@ public class DepthFirst extends Task<String[]> {
     private void bestTour(int pathID, String visitedPath,String visitedNodes,double distance) {
         end = System.currentTimeMillis();
         time = ((end - start)/1000);
-        System.out.println(time);
+
         secondIndicator.setText(time+"s");
         updateProgress(time,maxTime);
         if(time < maxTime) {
@@ -275,6 +248,37 @@ public class DepthFirst extends Task<String[]> {
     @Override
     public void updateProgress(double v, double v1) {
         super.updateProgress(v,v1);
+    }
+
+    public void printing(){
+        StringBuilder sb = new StringBuilder();
+        String[] bestTour = route.get(route.size()-1).split(" ");
+        setAllEdgeFalse();
+        for(int i=0; i< bestTour.length;i++){
+            Random r = new Random();
+            int red = r.nextInt(256);
+            int green = r.nextInt(256);
+            int blue = r.nextInt(256);
+            Path currPath = pathList.get(Integer.parseInt(bestTour[i]));
+            sb.append("\n-------------------\nVehicle ").append(i + 1).append("\n");
+            sb.append(currPath);
+            Integer[] nodeId = currPath.getNodes();
+
+            for (Integer integer : nodeId) {
+
+                CircleNode currentCircle = (CircleNode) cellNodesMap.get(integer);
+                currentCircle.setColour(red, green, blue);
+            }
+
+            for(int j=0;j<nodeId.length-1;j++){
+                edgesMap.get(nodeId[j]+" "+nodeId[j+1]).setVisible(true);
+            }
+        }
+
+        String text = "Depth First Search\n"+"Tour Cost : "+tourDistance+sb.toString();
+
+        System.out.println(text);
+        answer.setText(text);
     }
 
 }

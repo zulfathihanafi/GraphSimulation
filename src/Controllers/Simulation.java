@@ -41,9 +41,14 @@ public class Simulation implements Initializable {
     public Button start_button;
     public Text back_text;
     private static MapGraph map = new MapGraph();
-    public ProgressBar progressSecond;
-    public Text secondIndicator;
+    public ProgressBar progressMCTS;
+    public Text secondIndicatorMCTS;
+    public ProgressBar progressDFS;
+    public Text secondIndicatorDFS;
 
+
+    private DepthFirst depthFirst;
+    private NRPA nrpa;
     private String textFileDirectory = FirstChooseFile.textFileDirectory;
 
 
@@ -81,7 +86,13 @@ public class Simulation implements Initializable {
 
 
 
+        depthFirst = new DepthFirst(map,C,AnswerText,secondIndicatorDFS);
+        progressDFS.progressProperty().bind(depthFirst.progressProperty());
+        new Thread(depthFirst).start();
 
+        nrpa = new NRPA(map,N,C,AnswerText,secondIndicatorMCTS);
+        progressMCTS.progressProperty().bind(nrpa.progressProperty());
+        new Thread(nrpa).start();
     }
 
     static Model model;
@@ -141,26 +152,10 @@ public class Simulation implements Initializable {
         graph.endUpdate();
     }
 
-    //this method will back to prev page
-    public void backTextPressed(MouseEvent event) {
-        try {
-            model.clear();
-            map.clear();
-            Parent parent = FXMLLoader.load(getClass().getResource("../FXMLFiles/FirstChooseFile.fxml"));
-            Scene scene = new Scene(parent);
 
-            //This line gets stage information
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            window.setScene(scene);
-            window.show();
-
-        }catch (IOException e){
-            System.out.println("Error"+ e);
-        }
-    }
 
     public void startButtonPressed(ActionEvent event) {
+
 
         String algorithm = AlgorithmChooserBox.getValue();
         System.out.println(algorithm);
@@ -172,9 +167,7 @@ public class Simulation implements Initializable {
                 answer = BlindDFS.run(map,N,C,lorries);
                 break;
             case 1:
-                DepthFirst depthFirst = new DepthFirst(map,C,AnswerText,secondIndicator);
-                progressSecond.progressProperty().bind(depthFirst.progressProperty());
-                new Thread(depthFirst).start();
+                depthFirst.printing();
                 break;
             case 2 :
                 answer = A_star.run(map,C,lorries);
@@ -189,9 +182,7 @@ public class Simulation implements Initializable {
                 answer = Dijkstra.run(map,C,lorries);
                 break;
             case 6:
-                NRPA nrpa = new NRPA(map,N,C,AnswerText,secondIndicator);
-                progressSecond.progressProperty().bind(nrpa.progressProperty());
-                new Thread(nrpa).start();
+                nrpa.printing();
                 break;
 
         }
@@ -204,6 +195,9 @@ public class Simulation implements Initializable {
 
             AnswerText.setText(text);
         }
+    }
+
+    public void backTextPressed(MouseEvent event) {
     }
     //File textFile = new File(FirstChooseFile.textFileDirectory);
 
